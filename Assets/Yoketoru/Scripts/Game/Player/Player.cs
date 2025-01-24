@@ -25,7 +25,7 @@ public class Player : MonoBehaviour, IGameStateListener
     /// <summary>
     /// 初期化処理（Awake）
     /// </summary>
-    private void Awake()
+    private void Awake() 
     {
         // 座標を記録
         initialPosition = transform.position;
@@ -71,10 +71,6 @@ public class Player : MonoBehaviour, IGameStateListener
         {
             case State.Play:
                 Debug.Log($"操作と移動開始");
-
-                // 動作を確認したら、消す
-                transform.Find("Pivot").eulerAngles = new Vector3(0, 0, -45);
-                transform.Translate(new Vector3(1, 1, 0));
                 break;
 
             case State.Miss:
