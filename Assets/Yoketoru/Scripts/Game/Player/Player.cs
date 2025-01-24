@@ -1,18 +1,15 @@
-using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine;
 
-/// <summary>
-/// プレイヤーを制御するクラス。
-/// </summary>
 public class Player : MonoBehaviour, IGameStateListener
 {
     enum State
     {
-        None = -1,//初期状態
-        Play,//進行状態
-        Miss,
-        Clear,
-        Reset,  // リセット
+        None = -1, // 初期状態
+        Play, // 進行状態
+        Miss, // ミス状態
+        Clear, // クリア状態
+        Reset, // リセット
     }
 
     SimpleState<State> state = new(State.None);
@@ -46,7 +43,7 @@ public class Player : MonoBehaviour, IGameStateListener
     }
 
     /// <summary>
-    /// 物理処理ための固定更新
+    /// 物理処理のための固定更新
     /// </summary>
     void FixedUpdate()
     {
@@ -75,7 +72,7 @@ public class Player : MonoBehaviour, IGameStateListener
             case State.Play:
                 Debug.Log($"操作と移動開始");
 
-                // TODO: 動作を確認したら、消す
+                // 動作を確認したら、消す
                 transform.Find("Pivot").eulerAngles = new Vector3(0, 0, -45);
                 transform.Translate(new Vector3(1, 1, 0));
                 break;
@@ -89,6 +86,7 @@ public class Player : MonoBehaviour, IGameStateListener
                 break;
 
             case State.Reset:
+                // Reset状態になったときに座標と回転を元に戻す
                 Debug.Log($"座標と向きを、Awakeで記録したものに戻す");
 
                 // 座標と回転を初期状態に戻す
@@ -124,21 +122,21 @@ public class Player : MonoBehaviour, IGameStateListener
 
     public void OnReset()
     {
-        state.SetNextState(State.Reset);
+        state.SetNextState(State.Reset);  // Reset状態に遷移
     }
 
     public void OnGameStart()
     {
-        state.SetNextState(State.Play);
+        state.SetNextState(State.Play);  // Play状態に遷移
     }
 
     public void OnGameOver()
     {
-        state.SetNextState(State.Miss);
+        state.SetNextState(State.Miss);  // Miss状態に遷移
     }
 
     public void OnClear()
     {
-        state.SetNextState(State.Clear);
+        state.SetNextState(State.Clear);  // Clear状態に遷移
     }
 }
