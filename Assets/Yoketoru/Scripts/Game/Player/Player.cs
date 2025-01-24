@@ -8,16 +8,34 @@ public class Player : MonoBehaviour, IGameStateListener
 {
     enum State
     {
-        None = -1,
-        Play,
+        None = -1,//初期状態
+        Play,//進行状態
         Miss,
         Clear,
-        Reset,
+        Reset,  // リセット
     }
 
     SimpleState<State> state = new(State.None);
 
+    // 座標を記録するための変数
+    private Vector3 initialPosition;
+
+    // 回転を記録するための変数
+    private Vector3 initialRotation;
+
     public UnityEvent<IGameStateListener> GameStateListenerDestroyed { get; private set; } = new();
+
+    /// <summary>
+    /// 初期化処理（Awake）
+    /// </summary>
+    private void Awake()
+    {
+        // 座標を記録
+        initialPosition = transform.position;
+
+        // 回転を記録
+        initialRotation = transform.Find("Pivot").eulerAngles;
+    }
 
     /// <summary>
     /// フレーム更新
@@ -58,8 +76,7 @@ public class Player : MonoBehaviour, IGameStateListener
                 Debug.Log($"操作と移動開始");
 
                 // TODO: 動作を確認したら、消す
-                transform.Find("Pivot").eulerAngles
-                    = new Vector3(0, 0, -45);
+                transform.Find("Pivot").eulerAngles = new Vector3(0, 0, -45);
                 transform.Translate(new Vector3(1, 1, 0));
                 break;
 
@@ -73,6 +90,10 @@ public class Player : MonoBehaviour, IGameStateListener
 
             case State.Reset:
                 Debug.Log($"座標と向きを、Awakeで記録したものに戻す");
+
+                // 座標と回転を初期状態に戻す
+                transform.position = initialPosition;
+                transform.Find("Pivot").eulerAngles = initialRotation;
                 break;
         }
     }
